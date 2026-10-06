@@ -1,0 +1,6 @@
+dist/
+node_modules/
+qa/
+.env
+preview.log
+preview-error.log
