@@ -25,14 +25,14 @@ test('static output has distinct metadata, crawlable content, schema, and workin
     headings.add(html.match(/<h1>(.*?)<\/h1>/)[1]);
     assert.ok(html.includes(`rel="canonical" href="${base}${page.slug}"`));
     assert.ok(!html.includes('noindex'));
-    assert.ok(html.includes('Methodology &amp; Limitations'));
-    assert.ok(html.includes('Frequently Asked Questions'));
+    assert.equal(html.includes('Methodology &amp; Limitations'), page.type !== 'content');
+    assert.equal(html.includes('Frequently Asked Questions'), page.type !== 'content');
     assert.ok(!html.includes('{{'), 'Unresolved content placeholder');
     for (const match of html.matchAll(/href="#([^"]+)"/g)) {
       assert.ok(html.includes(`id="${match[1]}"`), `Missing section target: ${match[1]} on ${page.slug}`);
     }
     const data = JSON.parse(html.match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1]);
-    assert.ok(data.some(entry => entry['@type'] === 'WebApplication' && entry.url === base + page.slug));
+    assert.ok(data.some(entry => entry['@type'] === (page.type === 'content' ? 'WebPage' : 'WebApplication') && entry.url === base + page.slug));
     const breadcrumb = data.find(entry => entry['@type'] === 'BreadcrumbList');
     assert.equal(Boolean(breadcrumb), Boolean(page.slug));
     if (breadcrumb) {
@@ -46,9 +46,9 @@ test('static output has distinct metadata, crawlable content, schema, and workin
       assert.ok(existsSync(path), `Missing local target: ${target} on ${page.slug}`);
     }
   }
-  assert.equal(titles.size, 3); assert.equal(descriptions.size, 3); assert.equal(headings.size, 3);
+  assert.equal(titles.size, pages.length); assert.equal(descriptions.size, pages.length); assert.equal(headings.size, pages.length);
   const sitemap = readFileSync('qa/build-fixture/sitemap.xml', 'utf8');
-  assert.equal((sitemap.match(/<loc>/g) || []).length, 3);
+  assert.equal((sitemap.match(/<loc>/g) || []).length, pages.length);
   assert.deepEqual([...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map(match => match[1]), pages.map(page => base + page.slug));
   assert.ok(!sitemap.includes('<lastmod>'));
   assert.ok(readFileSync('qa/build-fixture/robots.txt', 'utf8').includes(`Sitemap: ${base}sitemap.xml`));

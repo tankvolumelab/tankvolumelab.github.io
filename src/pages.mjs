@@ -58,5 +58,13 @@ export const pages = [
       ['Why is my result different from the tank label?', 'A label may give a nominal size or recommended working capacity. The calculator uses only the ideal space implied by your internal measurements.'],
       ['Does this work for a sloping tank bottom?', 'No. The rectangular formula assumes a level base, straight vertical walls and a constant horizontal cross-section.']
     ]
+  },
+  {
+    slug: 'featured-on/', type: 'content', nav: 'Featured On',
+    title: 'Featured On - Tank Volume Lab',
+    heading: 'Featured On',
+    description: 'Find Tank Volume Lab on PostYourStartup.',
+    intro: 'Discover Tank Volume Lab on these startup directories.',
+    body: `<section class="featured-card" aria-labelledby="postyourstartup"><h2 id="postyourstartup">PostYourStartup</h2><p>Explore our listing on PostYourStartup.</p><a href="https://postyourstartup.co/startup/tank-volume-lab?ref=badge" target="_blank" rel="noopener noreferrer"><img src="https://postyourstartup.co/api/badge/tank-volume-lab?theme=light" alt="Featured on PostYourStartup" width="212" height="55" /></a></section>`
   }
 ];
